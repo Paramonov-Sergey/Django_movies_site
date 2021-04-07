@@ -10,9 +10,7 @@
 {% endblock %}
 
 {% block content %}
-        <div class="block-advertising">
 
-        </div>
         <div class="join">
             <div class="left-block">
                 <div class="poster">
@@ -217,24 +215,31 @@
             <div class="review">
                 <form action="{{ film.get_absolute_url }}" method="post">
                     {% csrf_token %}
-                    <div class="block-comment">
-                        <h2>Оставить отзыв</h2>
-                        <label for="text"><h3 id="label-comment">Ваш комментарий *</h3></label>
-                        <textarea name="text" id="text" class="comment-textarea" title="Комментарий"></textarea>
 
-                    </div>
+                    {% for f in form %}
+                        <label for="{{f.id_for_label}}">{{f.label}}</label>
+                        {{ f }}
+                        <div class="errors">{{ f.errors }}</div>
+                    {% endfor %}
 
-                    <div class="block-name">
-                        <label for="Name"><h3>Имя *</h3></label>
-                        <input type="text" title="Имя" class="input-name" name="name" id="Name"/>
-                        <div class="errors">{{ form.name.errors }}</div>
-                    </div>
+<!--                    <div class="block-comment">-->
+<!--                        <h2>Оставить отзыв</h2>-->
+<!--                        <label for="text"><h3 id="label-comment">Ваш комментарий *</h3></label>-->
+<!--                        <textarea name="text" id="text" class="comment-textarea" title="Комментарий"></textarea>-->
 
-                    <div class="block-email">
-                        <label for="Email"><h3>Email *</h3></label>
-                        <input type="email" title="Email" class="input-email" name="email" id="Email"/>
-                        <div class="errors"> {{ form.email.errors }}</div>
-                    </div>
+<!--                    </div>-->
+
+<!--                    <div class="block-name">-->
+<!--                        <label for="Name"><h3>Имя *</h3></label>-->
+<!--                        <input type="text" title="Имя" class="input-name" name="name" id="Name"/>-->
+<!--                        <div class="errors">{{ form.name.errors }}</div>-->
+<!--                    </div>-->
+
+<!--                    <div class="block-email">-->
+<!--                        <label for="Email"><h3>Email *</h3></label>-->
+<!--                        <input type="email" title="Email" class="input-email" name="email" id="Email"/>-->
+<!--                        <div class="errors"> {{ form.email.errors }}</div>-->
+<!--                    </div>-->
 
 
 
@@ -245,7 +250,14 @@
             {% for review in film.review_movie.all %}
                 <div class="review-show">
                     <div class="review-name"><h4>{{ review.name }}</h4></div>
-                    <p>{{ review.text }}</p>
+                    <label for="button{{review}}" class="label-in-review">Показать всю рецензию</label>
+                    <input type="checkbox" id="button{{review}}">
+                    <div class="block-review-p">
+                        <p>{{ review.text}}</p>
+                    </div>
+
+
+
 
                 </div>
             {% endfor %}

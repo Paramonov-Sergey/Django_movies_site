@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}"  type="text/css"/>
     {% endblock %}
     <title>{% block title %}
-                Мой сайт
+                {{title}}
             {% endblock %}
     </title>
 </head>
@@ -41,58 +41,56 @@
                 <button type="submit" class="button-search">Поиск</button>
             </form>
         </div>
-
         <div class="registr-exit">
-            <div><a href="/" title="Зарегистрироваться" >Регистрация</a></div>
-            <div><a href="/" title="Вход" >Вход</a></div>
+            {% if request.user.is_authenticated %}
+            <li class="last">{{user.username}} |</li>
+            <a href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+            <div><a href="{% url 'register' %}" title="Зарегистрироваться" >Регистрация</a></div>
+            <div><a href="{% url 'login' %}" title="Вход" >Войти</a></div>
+            {% endif %}
         </div>
+
 
     </header>
     <div class="block-content">
         {% block content %}
-            <div class="block-left">
-                <form action="{% url  'main' %}" method="get">
-                    <h3 class="otstup">Жанры</h3>
-                    <ul>
-                        {% for genre in genres %}
-                            <li class="genre_str">
-                                <input type="checkbox" name="genre_name" value="{{ genre.id }}"/>
-                                <span>{{ genre.name }}</span>
-                            </li>
-                        {% endfor %}
+           {% include 'movies/includes/left-block.html' %}
 
-                    </ul>
-                    <h3 class="otstup">Год</h3>
-                    <ul>
-                        {% for film in films %}
-                            <li class="genre_str">
-                                <input type="checkbox" name="year" value="{{ film.year }}"/>
-                                <span>{{ film.year }}</span>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
-
-
-                    <button type="submit" class="button-style-filter">Поиск</button>
-                </form>
-            </div>
             <div class="right-block">
                 {% for movie in movies %}
-                    <div class="post">
-                        <div class="post-img">
-                            <img src="{{ movie.poster.url }}" id="img_poster" />
-                        </div>
-                        <div class="post-meta">
-                            <h3 ><a  href="{% url 'film_detail_url' id=movie.id %}" class="title-movie" >{{ movie.title }}</a></h3>
-                        </div>
-                        <div class="slogan">
-                            <h3>{{ movie.tagline }}</h3>
-                        </div>
+                <div class="post">
+                    <div class="post-img">
+                        <img src="{{ movie.poster.url }}" id="img_poster" />
                     </div>
+                    <div class="post-meta">
+                        <h3 ><a  href="{% url 'film_detail_url' id=movie.id %}" class="title-movie" >{{ movie.title }}</a></h3>
+                    </div>
+                    <div class="slogan">
+                        <h3>{{ movie.tagline }}</h3>
+                    </div>
+                </div>
 
                 {% endfor %}
+                <div class="list-page">
+                    {% if page_obj.has_other_pages %}
+                    <ul class="ul-page">
+                        {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <li class="chose-page"><h3 id="chose-page-id">{{p}}</h3></li>
+                        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                            <li class="page-num">
+                                <a href="?page={{p}}" class="a-in-page">{{p}}</a>
+                            </li>
+                        {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                    {% endif %}
+                </div>
             </div>
+
+
         {% endblock %}
     </div>
     <footer>
