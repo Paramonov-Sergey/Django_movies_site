@@ -198,15 +198,22 @@
             </div>
 
             <div class="raiting-block">
-                <form action="{% url 'film_reiting' id=film.id %}" method="post">
+                <form action="{% url 'film_raiting' %}" method="post">
                     {% csrf_token %}
                     <h3>Рейтинг фильма</h3>
-                    {% for star in rating_stars %}
-                        <div id="star_div">
-                            <input class="star-look" type="radio" name="star" value="{{ star.id }}" id="raiting{{ star }}"/>
-                        </div>
-
+                    <input type="hidden" name="movie" value="{{film.id}}">
+                    {% for k,v in star_form.fields.star.choices %}
+                    <input type="radio" name="star" value="{{ k }}" id="rating{{v}}">
+                    <label for="rating{{v}}" class="rating-label"></label>
                     {% endfor %}
+<!--                    <input type="submit" class="send-input">-->
+
+<!--                    <button type="submit">отправит</button>-->
+<!--                        <div id="star_div">-->
+<!--                            <input class="star-look" type="radio" name="star" value="{{ star.id }}" id="raiting{{ star }}"/>-->
+<!--                        </div>-->
+
+
 
                 </form>
 

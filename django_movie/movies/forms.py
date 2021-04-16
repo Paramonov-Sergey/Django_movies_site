@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from.models import Reviews,Rating
+from .models import Reviews, Rating, RatingStar
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
@@ -28,6 +28,7 @@ class ReviewsForm(forms.ModelForm):
 
 
 class RatingForm(forms.ModelForm):
+    star=forms.ModelChoiceField(RatingStar.objects.all(),widget=forms.RadioSelect,empty_label=True)
     class Meta:
         model=Rating
         fields=['star']

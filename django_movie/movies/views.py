@@ -48,9 +48,9 @@ class FilmDetail(View):
     def get(self,request,id):
         film=Movie.objects.prefetch_related('actors').get(id=id)
         genres=Genre.objects.all()
-        rating_stars=RatingStar.objects.all()
         form=ReviewsForm()
-        return render(request,'movies/film_detail.html',context={'film':film,'rating_stars':rating_stars,'genres':genres,'form':form})
+        star_form=RatingForm()
+        return render(request, 'movies/film_detail.html',context={'film': film,'star_form':star_form, 'genres': genres, 'form': form})
 
     def post(self,request,id):
         form=ReviewsForm(request.POST)
@@ -65,12 +65,31 @@ class FilmDetail(View):
         return render(request,'movies/film_detail.html',context={'film':film,'form':form,'genres':genres})
 
 
-class RaitingDetail(View):
-    def post(self,request,id):
+class AddRating(View):
+    def get_client_ip(self,request):
+        x_forwarded_for=request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip=x_forwarded_for.split(',')[0]
+        else:
+            ip=request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self,request):
         rating_form=RatingForm(request.POST)
         if rating_form.is_valid():
-            rating_form=rating_form.save(commit=False)
-            movie_id=id
+            Rating.objects.update_or_create(
+                ip=self.get_client_ip(request),
+                movie_id=request.POST.get('movie'),
+                defaults={'star_id':int(request.POST.get('star'))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
+
+            # rating_form=rating_form.save(commit=False)
+            # rating_form.movie_id=request.POST['movie']
+            # rating_form.save()
+            # return redirect('/')
 
 
 

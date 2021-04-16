@@ -48,8 +48,8 @@ class ActorAdmin(admin.ModelAdmin):
 
 
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'star', 'movie')
-    list_display_links = ('id', 'star')
+    list_display = ('ip', 'star', 'movie')
+    list_display_links = ('ip','star')
     search_fields = ('id', 'movie')
 
 

@@ -205,7 +205,68 @@ hr{
     border:2px solid red;
     min-height:100px;
     margin:50px;
+    display:flex;
+    position:relative;
+
+
 }
+
+.raiting-block label{
+    display:block;
+    cursor:pointer;
+    width:60px;
+    height:60px;
+    float:right;
+
+
+}
+.raiting-block input{
+    display:none;
+
+}
+
+
+.raiting-block label::before{
+    position:relative;
+    content:'';
+    display:block;
+    background:url('../images/star_off.png');
+    background-size:60px 60px;
+    width:60px;
+    height:60px;
+    float:right;
+    margin-left:20px;
+    margin-top:15px;
+
+
+}
+
+.raiting-block label::after{
+    background:url('../images/star_on.png');
+    width:60px;
+    height:60px;
+    float:right;
+    display:block;
+    position:absolute;
+    content:'';
+    margin-bottom:5px;
+    opacity:0;
+    background-size:60px 60px;
+    transition:0.5s;
+    bottom:0px;
+    text-shadow:0 2px 5px rgba(0,0,0,0.5s);
+
+}
+.rating-label:hover::after,.rating-label:hover ~ label::after,.raiting-block input:checked~label::after{
+    opacity:1;
+}
+
+
+
+
+
+
+
 .review{
     width:500px;
     height:auto;
