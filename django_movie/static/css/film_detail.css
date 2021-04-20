@@ -202,7 +202,6 @@ hr{
 }
 .raiting-block{
     width:89%;
-    border:2px solid red;
     min-height:100px;
     margin:50px;
     display:flex;
